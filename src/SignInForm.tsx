@@ -101,7 +101,7 @@ export function SignInForm() {
         </div>
         <button
           className="w-full py-3 rounded-lg border border-gray-300 bg-white text-gray-700 font-semibold text-base sm:text-lg shadow-sm hover:bg-gray-50 transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-          onClick={() => void signIn("oauth-google")}
+          onClick={() => void signIn("google")}
           disabled={submitting}
           type="button"
         >

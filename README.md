@@ -1,28 +1,68 @@
-# Group Shared Expenses App
-  
-This is a project built with [Chef](https://chef.convex.dev) using [Convex](https://convex.dev) as its backend.
-  
-This project is connected to the Convex deployment named [`resilient-marten-503`](https://dashboard.convex.dev/d/resilient-marten-503).
-  
-## Project structure
-  
-The frontend code is in the `app` directory and is built with [Vite](https://vitejs.dev/).
-  
-The backend code is in the `convex` directory.
-  
-`npm run dev` will start the frontend and backend servers.
+# FairShare – Group Shared Expenses App
 
-## App authentication
+FairShare is a modern web application for managing and splitting group expenses, inspired by Splitwise. Built with [Convex](https://convex.dev) for the backend and [Vite](https://vitejs.dev/) for the frontend, FairShare makes it easy for friends, roommates, or teams to track shared costs and settle up effortlessly.
 
-Chef apps use [Convex Auth](https://auth.convex.dev/) with Anonymous auth for easy sign in. You may wish to change this before deploying your app.
+## Features
 
-## Developing and deploying your app
+- **Group Management:** Create and manage groups for different events or purposes.
+- **Expense Tracking:** Add, edit, and view shared expenses within groups.
+- **Payments:** Record payments and see who owes whom.
+- **Balances Summary:** Instantly view how much each member owes or is owed.
+- **Invitations:** Invite members to join groups via email.
+- **Authentication:** Secure sign-in with password and anonymous options (Convex Auth).
+- **Modern UI:** Clean, responsive interface for desktop and mobile.
 
-Check out the [Convex docs](https://docs.convex.dev/) for more information on how to develop with Convex.
-* If you're new to Convex, the [Overview](https://docs.convex.dev/understanding/) is a good place to start
-* Check out the [Hosting and Deployment](https://docs.convex.dev/production/) docs for how to deploy your app
-* Read the [Best Practices](https://docs.convex.dev/understanding/best-practices/) guide for tips on how to improve you app further
+## Project Structure
+
+- **Frontend:** `src/` – React components, pages, and styles.
+- **Backend:** `convex/` – Convex functions, schema, and authentication logic.
+
+## Getting Started
+
+1. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+2. **Set up environment variables:**
+   - Copy `.env.example` to `.env` and fill in your Convex deployment URL and any other required values.
+3. **Run the app locally:**
+   ```sh
+   npm run dev
+   ```
+   This starts both the frontend and backend servers.
+
+## Authentication
+
+FairShare uses [Convex Auth](https://auth.convex.dev/) for authentication. By default, anonymous and password-based sign-in are enabled for easy access. You can customize authentication providers as needed.
+
+## Deployment
+
+- The app is connected to the Convex deployment [`resilient-marten-503`](https://dashboard.convex.dev/d/resilient-marten-503).
+- For deployment instructions, see the [Convex Hosting and Deployment docs](https://docs.convex.dev/production/).
 
 ## HTTP API
 
-User-defined http routes are defined in the `convex/router.ts` file. We split these routes into a separate file from `convex/http.ts` to allow us to prevent the LLM from modifying the authentication routes.
+Custom HTTP routes are defined in `convex/router.ts`.
+
+## Future Plans
+
+- **Theme Support:** Light and dark mode toggle, with more themes planned.
+- **Mobile App:** Native mobile experience for iOS and Android.
+- **More Auth Providers:** Google, GitHub, and other OAuth options.
+- **Notifications:** Email and in-app notifications for expenses and payments.
+- **Advanced Analytics:** Visualize spending trends and group statistics.
+- **Internationalization:** Multi-language support.
+- **Enhanced Security:** 2FA and improved access controls.
+
+## Contributing
+
+Contributions are welcome! Please open issues or pull requests for suggestions, bug fixes, or new features.
+
+## Resources
+
+- [Convex Documentation](https://docs.convex.dev/)
+- [Vite Documentation](https://vitejs.dev/)
+
+---
+
+FairShare – Making group expenses fair and simple.

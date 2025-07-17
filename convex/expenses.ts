@@ -20,7 +20,7 @@ export const addExpense = mutation({
     // Check if user is a member of the group
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -33,7 +33,7 @@ export const addExpense = mutation({
     // Verify paidBy user is also a member
     const payerMembership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", args.paidBy)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -69,7 +69,7 @@ export const getGroupExpenses = query({
     // Check if user is a member
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -89,7 +89,7 @@ export const getGroupExpenses = query({
       expenses.map(async (expense) => {
         const payer = await ctx.db.get(expense.paidBy);
         const creator = await ctx.db.get(expense.createdBy);
-        
+
         return {
           ...expense,
           payerName: payer?.name || payer?.email || "Unknown",
@@ -114,7 +114,7 @@ export const getGroupBalances = query({
     // Check if user is a member
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -132,7 +132,7 @@ export const getGroupBalances = query({
       .collect();
 
     const memberCount = memberships.length;
-    
+
     // Get all expenses
     const expenses = await ctx.db
       .query("expenses")
@@ -149,28 +149,32 @@ export const getGroupBalances = query({
     const balances = await Promise.all(
       memberships.map(async (membership) => {
         const user = await ctx.db.get(membership.userId);
-        
+
         // Calculate total paid by this user
         const totalPaid = expenses
-          .filter(expense => expense.paidBy === membership.userId)
+          .filter((expense) => expense.paidBy === membership.userId)
           .reduce((sum, expense) => sum + expense.amount, 0);
 
         // Calculate total share of all expenses
-        const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        const totalExpenses = expenses.reduce(
+          (sum, expense) => sum + expense.amount,
+          0
+        );
         const shareOfExpenses = Math.round(totalExpenses / memberCount);
 
         // Calculate payments made by this user
         const paymentsMade = payments
-          .filter(payment => payment.fromUserId === membership.userId)
+          .filter((payment) => payment.fromUserId === membership.userId)
           .reduce((sum, payment) => sum + payment.amount, 0);
 
         // Calculate payments received by this user
         const paymentsReceived = payments
-          .filter(payment => payment.toUserId === membership.userId)
+          .filter((payment) => payment.toUserId === membership.userId)
           .reduce((sum, payment) => sum + payment.amount, 0);
 
-        // Net balance = (total paid - share of expenses) + (payments received - payments made)
-        const netBalance = (totalPaid - shareOfExpenses) + (paymentsReceived - paymentsMade);
+        // Net balance = (total paid - share of expenses) + (payments made - payments received)
+        const netBalance =
+          totalPaid - shareOfExpenses + (paymentsMade - paymentsReceived);
 
         return {
           userId: membership.userId,

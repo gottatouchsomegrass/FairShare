@@ -188,8 +188,9 @@ export const getSuggestedSettlements = query({
           .filter((payment) => payment.toUserId === membership.userId)
           .reduce((sum, payment) => sum + payment.amount, 0);
 
+        // Use the corrected net balance formula
         const netBalance =
-          totalPaid - shareOfExpenses + (paymentsReceived - paymentsMade);
+          totalPaid - shareOfExpenses + (paymentsMade - paymentsReceived);
 
         return {
           userId: membership.userId,
@@ -199,41 +200,41 @@ export const getSuggestedSettlements = query({
       })
     );
 
-    // Separate debtors and creditors
-    const debtors = balances
+    // Separate creditors and debtors using the corrected sign convention
+    const creditors = balances
       .filter((b) => b.netBalance > 1)
       .map((b) => ({ ...b, amount: b.netBalance }));
-    const creditors = balances
+    const debtors = balances
       .filter((b) => b.netBalance < -1)
       .map((b) => ({ ...b, amount: -b.netBalance }));
 
     // Generate settlement suggestions using a simple greedy algorithm
     const settlements = [];
-    let debtorsCopy = [...debtors];
     let creditorsCopy = [...creditors];
+    let debtorsCopy = [...debtors];
 
-    while (debtorsCopy.length > 0 && creditorsCopy.length > 0) {
-      const debtor = debtorsCopy[0];
+    while (creditorsCopy.length > 0 && debtorsCopy.length > 0) {
       const creditor = creditorsCopy[0];
+      const debtor = debtorsCopy[0];
 
-      const settlementAmount = Math.min(debtor.amount, creditor.amount);
+      const settlementAmount = Math.min(creditor.amount, debtor.amount);
 
       settlements.push({
-        fromUserId: creditor.userId,
-        fromUserName: creditor.name,
-        toUserId: debtor.userId,
-        toUserName: debtor.name,
+        fromUserId: debtor.userId,
+        fromUserName: debtor.name,
+        toUserId: creditor.userId,
+        toUserName: creditor.name,
         amount: settlementAmount,
       });
 
-      debtor.amount -= settlementAmount;
       creditor.amount -= settlementAmount;
+      debtor.amount -= settlementAmount;
 
-      if (debtor.amount <= 1) {
-        debtorsCopy.shift();
-      }
       if (creditor.amount <= 1) {
         creditorsCopy.shift();
+      }
+      if (debtor.amount <= 1) {
+        debtorsCopy.shift();
       }
     }
 

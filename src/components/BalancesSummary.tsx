@@ -59,10 +59,10 @@ export function BalancesSummary({
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="font-medium text-gray-900">
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">
                       {balance.name}
                     </h4>
-                    <div className="text-sm text-gray-600 mt-1 space-y-1">
+                    <div className="text-sm text-gray-600 dark:text-gray-300 mt-1 space-y-1">
                       <p>Total paid: {formatCurrency(balance.totalPaid)}</p>
                       <p>
                         Share of expenses:{" "}
@@ -81,16 +81,16 @@ export function BalancesSummary({
                     <div
                       className={`text-lg font-semibold ${
                         balance.netBalance > 0
-                          ? "text-green-600"
+                          ? "text-green-600 dark:text-green-400"
                           : balance.netBalance < 0
-                            ? "text-red-600"
-                            : "text-gray-600"
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-gray-600 dark:text-gray-300"
                       }`}
                     >
                       {balance.netBalance > 0 ? "+" : ""}
                       {formatCurrency(balance.netBalance)}
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {balance.netBalance > 0
                         ? "Owed to them"
                         : balance.netBalance < 0
@@ -158,15 +158,15 @@ export function BalancesSummary({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="bg-green-50 border border-green-200 rounded-lg p-4"
+            className="bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-700 rounded-lg p-4"
           >
-            <p className="text-green-800 font-medium text-lg flex items-center gap-2">
+            <p className="text-green-800 dark:text-green-200 font-medium text-lg flex items-center gap-2">
               <span role="img" aria-label="party">
                 🎉
               </span>{" "}
               All settled up!
             </p>
-            <p className="text-green-700 text-sm mt-1">
+            <p className="text-green-700 dark:text-green-300 text-sm mt-1">
               Everyone's balances are even. No payments needed.
             </p>
           </motion.div>

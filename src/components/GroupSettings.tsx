@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
 import { Id } from "../../convex/_generated/dataModel";
 import { motion } from "framer-motion";
+import { Loader } from "./Loader";
 
 interface GroupSettingsProps {
   groupId: Id<"groups">;
@@ -77,7 +78,7 @@ export function GroupSettings({
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-lg p-6">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <Loader className="mx-auto" />
         </div>
       </div>
     );

@@ -48,7 +48,7 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
         {expenses.map((expense, i) => (
           <motion.div
             key={expense._id}
-            className="bg-white p-4 rounded-lg shadow-sm border"
+            className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-zinc-700"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
@@ -56,15 +56,15 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
           >
             <div className="flex justify-between items-start">
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">
+                <h3 className="font-medium text-gray-900 dark:text-white">
                   {expense.description}
                 </h3>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Paid by {expense.payerName} on{" "}
                   {new Date(expense.date).toLocaleDateString()}
                 </p>
                 {expense.creatorName !== expense.payerName && (
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Added by {expense.creatorName}
                   </p>
                 )}
@@ -73,7 +73,7 @@ export function ExpensesList({ expenses }: ExpensesListProps) {
                 <div className="text-lg font-semibold text-primary">
                   {formatCurrency(expense.amount)}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
                   {new Date(expense.createdAt).toLocaleDateString()}
                 </div>
               </div>

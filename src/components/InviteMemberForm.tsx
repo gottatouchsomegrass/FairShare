@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
 import { Id } from "../../convex/_generated/dataModel";
 import { motion } from "framer-motion";
+import { Loader } from "./Loader";
 
 interface InviteMemberFormProps {
   groupId: Id<"groups">;
@@ -45,12 +46,14 @@ export function InviteMemberForm({ groupId, onClose }: InviteMemberFormProps) {
       exit={{ opacity: 0, y: 24 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-      <motion.div className="bg-white p-6 rounded-xl shadow-xl max-w-md w-full border mx-auto">
+      <motion.div className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-xl max-w-md w-full border border-gray-200 dark:border-zinc-700 mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Invite Member</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Invite Member
+          </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-xl"
+            className="text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-white text-xl"
           >
             ×
           </button>
@@ -60,7 +63,7 @@ export function InviteMemberForm({ groupId, onClose }: InviteMemberFormProps) {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
             >
               Email Address *
             </label>
@@ -69,11 +72,11 @@ export function InviteMemberForm({ groupId, onClose }: InviteMemberFormProps) {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-zinc-900 text-gray-900 dark:text-white"
               placeholder="friend@example.com"
               required
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               The user must already have an account to receive the invitation.
             </p>
           </div>
@@ -82,7 +85,7 @@ export function InviteMemberForm({ groupId, onClose }: InviteMemberFormProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
             >
               Cancel
             </button>
@@ -91,7 +94,11 @@ export function InviteMemberForm({ groupId, onClose }: InviteMemberFormProps) {
               disabled={!email.trim() || isSubmitting}
               className="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isSubmitting ? "Sending..." : "Send Invitation"}
+              {isSubmitting ? (
+                <Loader className="mx-auto h-5 w-5" />
+              ) : (
+                "Send Invitation"
+              )}
             </button>
           </div>
         </form>

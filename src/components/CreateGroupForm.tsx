@@ -3,6 +3,7 @@ import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { Loader } from "./Loader";
 
 interface CreateGroupFormProps {
   onCancel: () => void;
@@ -94,7 +95,11 @@ export function CreateGroupForm({ onCancel, onSuccess }: CreateGroupFormProps) {
             disabled={!name.trim() || isSubmitting}
             className="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {isSubmitting ? "Creating..." : "Create Group"}
+            {isSubmitting ? (
+              <Loader className="mx-auto h-5 w-5" />
+            ) : (
+              "Create Group"
+            )}
           </button>
         </div>
       </form>

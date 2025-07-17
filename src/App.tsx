@@ -7,9 +7,12 @@ import { Dashboard } from "./components/Dashboard";
 import { UserProfile } from "./components/UserProfile";
 import { FAQ } from "./components/FAQ";
 import { HowToGuide } from "./components/HowToGuide";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Loader } from "./components/Loader";
 import { ModeToggle } from "./components/mode-toggle";
+import gsap from "gsap";
+import { Menu } from "@headlessui/react";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 
 export default function App() {
   const [showUserProfile, setShowUserProfile] = useState(false);
@@ -17,34 +20,89 @@ export default function App() {
   const [showHowTo, setShowHowTo] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-2 sm:px-4">
-        <h2 className="text-lg sm:text-xl font-semibold text-primary">
-          FairShare
-        </h2>
-        <div className="flex items-center gap-2 sm:gap-4">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-zinc-900">
+      <header className="sticky top-0 z-20 bg-white/80 dark:bg-zinc-900/90 backdrop-blur-md h-16 flex justify-between items-center border-b border-gray-200 dark:border-zinc-800 shadow-lg px-2 sm:px-4 md:px-8 transition-colors">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold text-2xl shadow-md mr-1 sm:mr-2">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-users"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </span>
+          <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight text-primary dark:text-white font-sans">
+            FairShare
+          </h2>
+        </div>
+        {/* Desktop nav */}
+        <div className="hidden sm:flex items-center gap-2 sm:gap-4">
           <ModeToggle />
           <Authenticated>
             <button
               onClick={() => setShowHowTo(true)}
-              className="text-xs sm:text-sm text-gray-600 hover:text-primary transition-colors"
+              className="text-xs sm:text-sm text-gray-600 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors font-medium px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800"
             >
               📚 How-To Guide
             </button>
             <button
               onClick={() => setShowFAQ(true)}
-              className="text-xs sm:text-sm text-gray-600 hover:text-primary transition-colors"
+              className="text-xs sm:text-sm text-gray-600 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors font-medium px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800"
             >
               ❓ FAQ
             </button>
             <button
               onClick={() => setShowUserProfile(true)}
-              className="text-xs sm:text-sm text-gray-600 hover:text-primary transition-colors"
+              className="text-xs sm:text-sm text-gray-600 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors font-medium px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800"
             >
               👤 Profile
             </button>
             <SignOutButton />
           </Authenticated>
+        </div>
+        {/* Mobile nav */}
+        <div className="flex sm:hidden items-center">
+          <Menu as="div" className="relative inline-block text-left">
+            <Menu.Button className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary">
+              <Bars3Icon className="w-6 h-6 text-gray-700 dark:text-gray-200" />
+            </Menu.Button>
+            <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 divide-y divide-gray-100 dark:divide-zinc-800 rounded-md shadow-lg focus:outline-none z-50">
+              <div className="px-1 py-1">
+                <ModeToggle />
+                <Authenticated>
+                  <button
+                    onClick={() => setShowHowTo(true)}
+                    className="w-full text-left text-xs text-gray-600 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors font-medium px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800"
+                  >
+                    📚 How-To Guide
+                  </button>
+                  <button
+                    onClick={() => setShowFAQ(true)}
+                    className="w-full text-left text-xs text-gray-600 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors font-medium px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800"
+                  >
+                    ❓ FAQ
+                  </button>
+                  <button
+                    onClick={() => setShowUserProfile(true)}
+                    className="w-full text-left text-xs text-gray-600 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors font-medium px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800"
+                  >
+                    👤 Profile
+                  </button>
+                  <SignOutButton />
+                </Authenticated>
+              </div>
+            </Menu.Items>
+          </Menu>
         </div>
       </header>
       <main className="flex-1 p-2 sm:p-4 flex flex-col justify-center">
@@ -62,8 +120,37 @@ export default function App() {
   );
 }
 
+function AnimatedWelcome() {
+  const el = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (el.current) {
+      gsap.fromTo(
+        el.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+      );
+    }
+  }, []);
+  return (
+    <div
+      ref={el}
+      className="text-2xl sm:text-3xl font-bold text-primary dark:text-primary-300 mb-6 text-center"
+    >
+      Welcome to FairShare!
+    </div>
+  );
+}
+
 function Content() {
   const loggedInUser = useQuery(api.auth.loggedInUser);
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  // Hide welcome after first dashboard render
+  useEffect(() => {
+    if (loggedInUser && showWelcome) {
+      setShowWelcome(false);
+    }
+  }, [loggedInUser]);
 
   if (loggedInUser === undefined) {
     return (
@@ -75,24 +162,18 @@ function Content() {
 
   return (
     <div className="max-w-6xl mx-auto w-full px-2 sm:px-4 md:px-8">
-      <Authenticated>
-        <Dashboard />
-      </Authenticated>
       <Unauthenticated>
-        <div className="flex flex-col items-center justify-center min-h-[300px] sm:min-h-[400px] gap-6 sm:gap-8">
-          <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-3 sm:mb-4">
-              Welcome to FairShare
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-secondary mb-6 sm:mb-8">
-              Split expenses with friends and keep track of who owes what
-            </p>
-          </div>
-          <div className="w-full max-w-sm sm:max-w-md md:max-w-lg">
+        <AnimatedWelcome />
+        <div className="flex flex-col items-center justify-center min-h-[300px] sm:min-h-[400px] gap-4 sm:gap-8 w-full px-2">
+          <div className="w-full max-w-xs sm:max-w-sm md:max-w-lg">
             <SignInForm />
           </div>
         </div>
       </Unauthenticated>
+      <Authenticated>
+        {/* Do not show AnimatedWelcome after login/dashboard */}
+        <Dashboard />
+      </Authenticated>
     </div>
   );
 }

@@ -104,15 +104,15 @@ export function FAQ({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               Frequently Asked Questions
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-xl"
+              className="text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-white text-xl"
             >
               ×
             </button>
@@ -126,11 +126,14 @@ export function FAQ({ onClose }: { onClose: () => void }) {
                 </h3>
                 <div className="space-y-4">
                   {category.questions.map((faq, faqIndex) => (
-                    <div key={faqIndex} className="bg-gray-50 rounded-lg p-4">
-                      <h4 className="font-medium text-gray-900 mb-2">
+                    <div
+                      key={faqIndex}
+                      className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4"
+                    >
+                      <h4 className="font-medium text-gray-900 dark:text-white mb-2">
                         {faq.question}
                       </h4>
-                      <p className="text-gray-700 text-sm leading-relaxed">
+                      <p className="text-gray-700 dark:text-gray-200 text-sm leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
@@ -140,11 +143,11 @@ export function FAQ({ onClose }: { onClose: () => void }) {
             ))}
           </div>
 
-          <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-900 mb-2">
+          <div className="mt-8 bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+            <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">
               Still have questions?
             </h3>
-            <p className="text-blue-800 text-sm">
+            <p className="text-blue-800 dark:text-blue-100 text-sm">
               If you can't find the answer you're looking for, feel free to
               reach out to our support team. We're here to help make your
               expense splitting experience as smooth as possible!

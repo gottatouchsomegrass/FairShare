@@ -6,34 +6,37 @@ import { GroupDetails } from "./GroupDetails";
 import { InvitationsList } from "./InvitationsList";
 import { CreateGroupForm } from "./CreateGroupForm";
 import { Id } from "../../convex/_generated/dataModel";
+import { Loader } from "./Loader";
 
 export function Dashboard() {
-  const [selectedGroupId, setSelectedGroupId] = useState<Id<"groups"> | null>(null);
+  const [selectedGroupId, setSelectedGroupId] = useState<Id<"groups"> | null>(
+    null
+  );
   const [showCreateGroup, setShowCreateGroup] = useState(false);
-  
+
   const groups = useQuery(api.groups.getUserGroups);
   const invitations = useQuery(api.groups.getPendingInvitations);
 
   if (groups === undefined || invitations === undefined) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <Loader />
       </div>
     );
   }
 
   if (selectedGroupId) {
     return (
-      <GroupDetails 
-        groupId={selectedGroupId} 
-        onBack={() => setSelectedGroupId(null)} 
+      <GroupDetails
+        groupId={selectedGroupId}
+        onBack={() => setSelectedGroupId(null)}
       />
     );
   }
 
   if (showCreateGroup) {
     return (
-      <CreateGroupForm 
+      <CreateGroupForm
         onCancel={() => setShowCreateGroup(false)}
         onSuccess={() => setShowCreateGroup(false)}
       />
@@ -52,14 +55,9 @@ export function Dashboard() {
         </button>
       </div>
 
-      {invitations.length > 0 && (
-        <InvitationsList invitations={invitations} />
-      )}
+      {invitations.length > 0 && <InvitationsList invitations={invitations} />}
 
-      <GroupList 
-        groups={groups} 
-        onSelectGroup={setSelectedGroupId} 
-      />
+      <GroupList groups={groups} onSelectGroup={setSelectedGroupId} />
     </div>
   );
 }

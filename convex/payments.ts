@@ -21,7 +21,7 @@ export const recordPayment = mutation({
     // Check if user is a member of the group
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -34,7 +34,7 @@ export const recordPayment = mutation({
     // Verify both users are members of the group
     const fromMembership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", args.fromUserId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -42,7 +42,7 @@ export const recordPayment = mutation({
 
     const toMembership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", args.toUserId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -87,7 +87,7 @@ export const getGroupPayments = query({
     // Check if user is a member
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -108,7 +108,7 @@ export const getGroupPayments = query({
         const fromUser = await ctx.db.get(payment.fromUserId);
         const toUser = await ctx.db.get(payment.toUserId);
         const creator = await ctx.db.get(payment.createdBy);
-        
+
         return {
           ...payment,
           fromUserName: fromUser?.name || fromUser?.email || "Unknown",
@@ -134,7 +134,7 @@ export const getSuggestedSettlements = query({
     // Check if user is a member
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -152,7 +152,7 @@ export const getSuggestedSettlements = query({
       .collect();
 
     const memberCount = memberships.length;
-    
+
     // Get all expenses
     const expenses = await ctx.db
       .query("expenses")
@@ -169,23 +169,27 @@ export const getSuggestedSettlements = query({
     const balances = await Promise.all(
       memberships.map(async (membership) => {
         const user = await ctx.db.get(membership.userId);
-        
+
         const totalPaid = expenses
-          .filter(expense => expense.paidBy === membership.userId)
+          .filter((expense) => expense.paidBy === membership.userId)
           .reduce((sum, expense) => sum + expense.amount, 0);
 
-        const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        const totalExpenses = expenses.reduce(
+          (sum, expense) => sum + expense.amount,
+          0
+        );
         const shareOfExpenses = Math.round(totalExpenses / memberCount);
 
         const paymentsMade = payments
-          .filter(payment => payment.fromUserId === membership.userId)
+          .filter((payment) => payment.fromUserId === membership.userId)
           .reduce((sum, payment) => sum + payment.amount, 0);
 
         const paymentsReceived = payments
-          .filter(payment => payment.toUserId === membership.userId)
+          .filter((payment) => payment.toUserId === membership.userId)
           .reduce((sum, payment) => sum + payment.amount, 0);
 
-        const netBalance = (totalPaid - shareOfExpenses) + (paymentsReceived - paymentsMade);
+        const netBalance =
+          totalPaid - shareOfExpenses + (paymentsReceived - paymentsMade);
 
         return {
           userId: membership.userId,
@@ -196,8 +200,12 @@ export const getSuggestedSettlements = query({
     );
 
     // Separate debtors and creditors
-    const debtors = balances.filter(b => b.netBalance < -1).map(b => ({ ...b, amount: -b.netBalance }));
-    const creditors = balances.filter(b => b.netBalance > 1).map(b => ({ ...b, amount: b.netBalance }));
+    const debtors = balances
+      .filter((b) => b.netBalance > 1)
+      .map((b) => ({ ...b, amount: b.netBalance }));
+    const creditors = balances
+      .filter((b) => b.netBalance < -1)
+      .map((b) => ({ ...b, amount: -b.netBalance }));
 
     // Generate settlement suggestions using a simple greedy algorithm
     const settlements = [];
@@ -211,10 +219,10 @@ export const getSuggestedSettlements = query({
       const settlementAmount = Math.min(debtor.amount, creditor.amount);
 
       settlements.push({
-        fromUserId: debtor.userId,
-        fromUserName: debtor.name,
-        toUserId: creditor.userId,
-        toUserName: creditor.name,
+        fromUserId: creditor.userId,
+        fromUserName: creditor.name,
+        toUserId: debtor.userId,
+        toUserName: debtor.name,
         amount: settlementAmount,
       });
 

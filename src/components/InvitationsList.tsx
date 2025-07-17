@@ -49,8 +49,8 @@ export function InvitationsList({ invitations }: InvitationsListProps) {
   }
 
   return (
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-      <h2 className="text-lg font-semibold text-blue-900 mb-4">
+    <div className="bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+      <h2 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-4">
         Pending Invitations ({invitations.length})
       </h2>
       <div className="space-y-3">
@@ -58,17 +58,17 @@ export function InvitationsList({ invitations }: InvitationsListProps) {
           {invitations.map((invitation, i) => (
             <motion.div
               key={invitation._id}
-              className="bg-white p-4 rounded-lg shadow-sm border"
+              className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-zinc-700"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 16 }}
               transition={{ duration: 0.4, delay: i * 0.05, ease: "easeInOut" }}
             >
               <div>
-                <h3 className="font-medium text-gray-900">
+                <h3 className="font-medium text-gray-900 dark:text-white">
                   {invitation.groupName}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   Invited by {invitation.inviterName} on{" "}
                   {new Date(invitation.invitedAt).toLocaleDateString()}
                 </p>

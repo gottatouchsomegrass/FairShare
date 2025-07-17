@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
 import { Id } from "../../convex/_generated/dataModel";
 import { motion } from "framer-motion";
+import { Loader } from "./Loader";
 
 interface Member {
   userId: Id<"users">;
@@ -207,7 +208,11 @@ export function AddPaymentForm({
             }
             className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {isSubmitting ? "Recording..." : "Record Payment"}
+            {isSubmitting ? (
+              <Loader className="mx-auto h-5 w-5" />
+            ) : (
+              "Record Payment"
+            )}
           </button>
         </div>
       </form>

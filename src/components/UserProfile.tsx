@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
+import { Loader } from "@/components/Loader";
 
 export function UserProfile({ onClose }: { onClose: () => void }) {
-  const [activeTab, setActiveTab] = useState<"profile" | "preferences">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "preferences">(
+    "profile"
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +42,7 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-lg p-6">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <Loader className="mx-auto" />
         </div>
       </div>
     );
@@ -47,13 +50,15 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">User Profile</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              User Profile
+            </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-xl"
+              className="text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-white text-xl"
             >
               ×
             </button>
@@ -90,7 +95,10 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
             <div className="space-y-6">
               <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Display Name *
                   </label>
                   <input
@@ -104,7 +112,10 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Email Address
                   </label>
                   <input
@@ -115,7 +126,8 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Email cannot be changed. Contact support if you need to update your email.
+                    Email cannot be changed. Contact support if you need to
+                    update your email.
                   </p>
                 </div>
 
@@ -129,15 +141,23 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
               </form>
 
               {/* Account Stats */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-3">Account Statistics</h3>
+              <div className="bg-gray-50 dark:bg-zinc-800 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                  Account Statistics
+                </h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-gray-600">Member since</p>
-                    <p className="font-medium">{new Date(user._creationTime).toLocaleDateString()}</p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Member since
+                    </p>
+                    <p className="font-medium">
+                      {new Date(user._creationTime).toLocaleDateString()}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Account ID</p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Account ID
+                    </p>
                     <p className="font-mono text-xs">{user._id}</p>
                   </div>
                 </div>
@@ -147,16 +167,22 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
 
           {activeTab === "preferences" && (
             <div className="space-y-6">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Coming Soon</h3>
-                <p className="text-blue-800 text-sm">
-                  User preferences like currency settings, notification preferences, and theme options will be available in a future update.
+              <div className="bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                <h3 className="font-semibold text-blue-900 dark:text-blue-200 mb-2">
+                  Coming Soon
+                </h3>
+                <p className="text-blue-800 dark:text-blue-100 text-sm">
+                  User preferences like currency settings, notification
+                  preferences, and theme options will be available in a future
+                  update.
                 </p>
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-900">Planned Features</h3>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  Planned Features
+                </h3>
+                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <li>• Default currency selection</li>
                   <li>• Email notification preferences</li>
                   <li>• Dark/light theme toggle</li>

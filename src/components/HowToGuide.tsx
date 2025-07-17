@@ -186,15 +186,17 @@ export function HowToGuide({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex">
           {/* Sidebar */}
-          <div className="w-1/3 bg-gray-50 p-6 border-r">
+          <div className="w-1/3 bg-gray-50 dark:bg-zinc-800 p-6 border-r border-gray-200 dark:border-zinc-700">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-900">How-To Guides</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                How-To Guides
+              </h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 text-xl"
+                className="text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-white text-xl"
               >
                 ×
               </button>
@@ -208,7 +210,7 @@ export function HowToGuide({ onClose }: { onClose: () => void }) {
                   className={`w-full text-left p-3 rounded-lg transition-colors ${
                     activeGuide === option.id
                       ? "bg-primary text-white"
-                      : "text-gray-700 hover:bg-gray-200"
+                      : "text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-zinc-700"
                   }`}
                 >
                   <span className="mr-3">{option.icon}</span>
@@ -266,11 +268,11 @@ export function HowToGuide({ onClose }: { onClose: () => void }) {
               ))}
             </div>
 
-            <div className="mt-8 bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-semibold text-green-900 mb-2">
+            <div className="mt-8 bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-700 rounded-lg p-4">
+              <h4 className="font-semibold text-green-900 dark:text-green-200 mb-2">
                 🎉 You're all set!
               </h4>
-              <p className="text-green-800 text-sm">
+              <p className="text-green-800 dark:text-green-100 text-sm">
                 Follow these steps and you'll be splitting expenses like a pro.
                 Remember, you can always come back to these guides anytime you
                 need a refresher.

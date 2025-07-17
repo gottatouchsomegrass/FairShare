@@ -14,6 +14,12 @@ import gsap from "gsap";
 import { Menu } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 
+// Add this type for BeforeInstallPromptEvent
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+}
+
 export default function App() {
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [showFAQ, setShowFAQ] = useState(false);
@@ -54,6 +60,7 @@ export default function App() {
         {/* Desktop nav */}
         <div className="hidden sm:flex items-center gap-2 sm:gap-4">
           {/* <ModeToggle /> */}
+          <AddToHomeScreenButton />
           <Authenticated>
             <button
               onClick={() => setShowHowTo(true)}
@@ -193,5 +200,52 @@ function Content() {
         <Dashboard />
       </Authenticated>
     </div>
+  );
+}
+
+function AddToHomeScreenButton() {
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setShowButton(true);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleClick = async () => {
+    if (!deferredPrompt) return;
+    await deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === "accepted") {
+      setShowButton(false);
+    }
+    setDeferredPrompt(null);
+  };
+
+  if (!showButton) return null;
+
+  return (
+    <button
+      onClick={handleClick}
+      style={{
+        marginLeft: 12,
+        padding: "6px 14px",
+        background: "#2563eb",
+        color: "#fff",
+        border: "none",
+        borderRadius: "6px",
+        fontWeight: "bold",
+        cursor: "pointer",
+        fontSize: "0.95rem",
+      }}
+    >
+      Add to Homescreen
+    </button>
   );
 }

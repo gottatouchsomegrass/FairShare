@@ -9,7 +9,7 @@ import { FAQ } from "./components/FAQ";
 import { HowToGuide } from "./components/HowToGuide";
 import { useState, useRef, useEffect } from "react";
 import { Loader } from "./components/Loader";
-import { ModeToggle } from "./components/mode-toggle";
+// import { ModeToggle } from "./components/mode-toggle";
 import gsap from "gsap";
 import { Menu } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
@@ -47,7 +47,7 @@ export default function App() {
         </div>
         {/* Desktop nav */}
         <div className="hidden sm:flex items-center gap-2 sm:gap-4">
-          <ModeToggle />
+          {/* <ModeToggle /> */}
           <Authenticated>
             <button
               onClick={() => setShowHowTo(true)}
@@ -78,7 +78,7 @@ export default function App() {
             </Menu.Button>
             <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 divide-y divide-gray-100 dark:divide-zinc-800 rounded-md shadow-lg focus:outline-none z-50">
               <div className="px-1 py-1">
-                <ModeToggle />
+                {/* <ModeToggle /> */}
                 <Authenticated>
                   <button
                     onClick={() => setShowHowTo(true)}

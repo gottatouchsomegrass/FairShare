@@ -2,11 +2,14 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
 
 export function SignInForm() {
   const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [submitting, setSubmitting] = useState(false);
+  const setNameAtRegistration = useMutation(api.users.setNameAtRegistration);
 
   return (
     <div className="flex items-center justify-center bg-gray-50 py-6 px-2 sm:px-4 md:px-8">
@@ -23,14 +26,24 @@ export function SignInForm() {
         </div>
         <form
           className="flex flex-col gap-4 sm:gap-5"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             setSubmitting(true);
             const formData = new FormData(e.target as HTMLFormElement);
             formData.set("flow", flow);
-            void signIn("password", formData).catch((error) => {
+            const name = formData.get("name") as string;
+            try {
+              await signIn("password", formData);
+              if (flow === "signUp" && name) {
+                try {
+                  await setNameAtRegistration({ name });
+                } catch (err) {
+                  toast.error("Failed to set display name after sign up");
+                }
+              }
+            } catch (error: any) {
               let toastTitle = "";
-              if (error.message.includes("Invalid password")) {
+              if (error.message && error.message.includes("Invalid password")) {
                 toastTitle = "Invalid password. Please try again.";
               } else {
                 toastTitle =
@@ -40,9 +53,20 @@ export function SignInForm() {
               }
               toast.error(toastTitle);
               setSubmitting(false);
-            });
+            }
           }}
         >
+          {flow === "signUp" && (
+            <input
+              className="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition placeholder-gray-400 bg-gray-50 text-sm sm:text-base"
+              type="text"
+              name="name"
+              placeholder="Name"
+              required
+              autoComplete="name"
+              disabled={submitting}
+            />
+          )}
           <input
             className="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition placeholder-gray-400  bg-gray-50 text-sm sm:text-base"
             type="email"

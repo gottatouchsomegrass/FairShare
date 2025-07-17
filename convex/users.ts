@@ -20,3 +20,23 @@ export const updateProfile = mutation({
     return { success: true };
   },
 });
+
+// Set user name at registration (required)
+export const setNameAtRegistration = mutation({
+  args: {
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("Not authenticated");
+    }
+    if (!args.name || args.name.trim().length === 0) {
+      throw new Error("Name is required");
+    }
+    await ctx.db.patch(userId, {
+      name: args.name.trim(),
+    });
+    return { success: true };
+  },
+});

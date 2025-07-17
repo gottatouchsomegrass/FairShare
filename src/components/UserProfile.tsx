@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
@@ -15,11 +15,13 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
   const user = useQuery(api.auth.loggedInUser);
   const updateProfile = useMutation(api.users.updateProfile);
 
-  // Initialize form when user data loads
-  if (user && !name && !email) {
-    setName(user.name || "");
-    setEmail(user.email || "");
-  }
+  // Initialize form when user data loads or changes
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setEmail(user.email || "");
+    }
+  }, [user]);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();

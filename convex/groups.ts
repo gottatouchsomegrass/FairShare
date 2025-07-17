@@ -56,7 +56,7 @@ export const updateGroup = mutation({
     // Check if user is the creator or a member
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -163,7 +163,7 @@ export const removeMember = mutation({
 
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", args.userId)
       )
       .first();
@@ -197,7 +197,7 @@ export const getUserGroups = query({
       memberships.map(async (membership) => {
         const group = await ctx.db.get(membership.groupId);
         if (!group) return null;
-        
+
         const creator = await ctx.db.get(group.createdBy);
         return {
           ...group,
@@ -206,7 +206,9 @@ export const getUserGroups = query({
       })
     );
 
-    return groups.filter((group): group is NonNullable<typeof group> => group !== null);
+    return groups.filter(
+      (group): group is NonNullable<typeof group> => group !== null
+    );
   },
 });
 
@@ -222,7 +224,7 @@ export const getGroupDetails = query({
     // Check if user is a member
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -263,11 +265,11 @@ export const getGroupDetails = query({
   },
 });
 
-// Invite user to group
+// Invite user to group by userId
 export const inviteToGroup = mutation({
   args: {
     groupId: v.id("groups"),
-    email: v.string(),
+    userId: v.id("users"),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -278,7 +280,7 @@ export const inviteToGroup = mutation({
     // Check if user is a member of the group
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "accepted"))
@@ -288,12 +290,8 @@ export const inviteToGroup = mutation({
       throw new Error("Not authorized to invite to this group");
     }
 
-    // Find user by email
-    const invitee = await ctx.db
-      .query("users")
-      .withIndex("email", (q) => q.eq("email", args.email))
-      .first();
-
+    // Find user by userId
+    const invitee = await ctx.db.get(args.userId);
     if (!invitee) {
       throw new Error("User not found");
     }
@@ -301,8 +299,8 @@ export const inviteToGroup = mutation({
     // Check if already invited/member
     const existingMembership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
-        q.eq("groupId", args.groupId).eq("userId", invitee._id)
+      .withIndex("by_group_and_user", (q) =>
+        q.eq("groupId", args.groupId).eq("userId", args.userId)
       )
       .first();
 
@@ -317,7 +315,7 @@ export const inviteToGroup = mutation({
     // Create invitation
     await ctx.db.insert("groupMembers", {
       groupId: args.groupId,
-      userId: invitee._id,
+      userId: args.userId,
       status: "pending",
       invitedBy: userId,
       invitedAt: Date.now(),
@@ -338,7 +336,7 @@ export const getPendingInvitations = query({
 
     const invitations = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user_and_status", (q) => 
+      .withIndex("by_user_and_status", (q) =>
         q.eq("userId", userId).eq("status", "pending")
       )
       .collect();
@@ -347,7 +345,7 @@ export const getPendingInvitations = query({
       invitations.map(async (invitation) => {
         const group = await ctx.db.get(invitation.groupId);
         const inviter = await ctx.db.get(invitation.invitedBy);
-        
+
         return {
           ...invitation,
           groupName: group?.name || "Unknown Group",
@@ -374,7 +372,7 @@ export const respondToInvitation = mutation({
 
     const invitation = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group_and_user", (q) => 
+      .withIndex("by_group_and_user", (q) =>
         q.eq("groupId", args.groupId).eq("userId", userId)
       )
       .filter((q) => q.eq(q.field("status"), "pending"))

@@ -160,7 +160,19 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
                     <p className="text-gray-600 dark:text-gray-300">
                       Account ID
                     </p>
-                    <p className="font-mono text-xs">{user._id}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-mono text-xs break-all">{user._id}</p>
+                      <button
+                        type="button"
+                        className="px-2 py-1 text-xs bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+                        onClick={() => {
+                          navigator.clipboard.writeText(user._id);
+                          toast.success("User ID copied to clipboard!");
+                        }}
+                      >
+                        Copy
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

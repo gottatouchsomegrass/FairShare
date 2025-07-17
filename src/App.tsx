@@ -23,7 +23,11 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-zinc-900">
       <header className="sticky top-0 z-20 bg-white/80 dark:bg-zinc-900/90 backdrop-blur-md h-16 flex justify-between items-center border-b border-gray-200 dark:border-zinc-800 shadow-lg px-2 sm:px-4 md:px-8 transition-colors">
         <div className="flex items-center gap-2 sm:gap-3">
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold text-2xl shadow-md mr-1 sm:mr-2">
+          <a
+            href="/"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold text-2xl shadow-md mr-1 sm:mr-2"
+            style={{ textDecoration: "none" }}
+          >
             <svg
               width="28"
               height="28"
@@ -40,10 +44,12 @@ export default function App() {
               <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-          </span>
-          <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight text-primary dark:text-white font-sans">
-            FairShare
-          </h2>
+          </a>
+          <a href="/" style={{ textDecoration: "none" }}>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight text-primary font-sans">
+              FairShare
+            </h2>
+          </a>
         </div>
         {/* Desktop nav */}
         <div className="hidden sm:flex items-center gap-2 sm:gap-4">
@@ -116,6 +122,18 @@ export default function App() {
       )}
       {showFAQ && <FAQ onClose={() => setShowFAQ(false)} />}
       {showHowTo && <HowToGuide onClose={() => setShowHowTo(false)} />}
+      {/* Footer */}
+      <footer className="w-full text-center py-4 text-gray-500 text-sm border-t border-gray-200 mt-8">
+        Made by{" "}
+        <a
+          href="https://github.com/gottatouchsomegrass"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary hover:underline"
+        >
+          gottatouchsomegrass (GitHub)
+        </a>
+      </footer>
     </div>
   );
 }

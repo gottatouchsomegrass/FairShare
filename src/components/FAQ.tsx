@@ -9,9 +9,9 @@ export function FAQ({ onClose }: { onClose: () => void }) {
             "Click the 'Create Group' button on your dashboard, enter a group name and optional description, then click 'Create Group'. You'll automatically be added as the first member.",
         },
         {
-          question: "How do I invite friends to my group?",
+          question: "How do I invite someone to my group?",
           answer:
-            "Open your group, click 'Invite Member', and enter their email address. They must already have a FairShare account to receive the invitation.",
+            "Click 'Invite Member' in your group, then enter your friend's User ID (which they can find and copy from their profile page). Invitations are no longer sent by email.",
         },
         {
           question: "Can I join multiple groups?",

@@ -63,6 +63,10 @@ Contributions are welcome! Please open issues or pull requests for suggestions, 
 - [Convex Documentation](https://docs.convex.dev/)
 - [Vite Documentation](https://vitejs.dev/)
 
+## Inviting Members
+
+To invite someone to your group, click the 'Invite Member' button and enter their User ID (which they can find and copy from their profile page). Invitations are no longer sent by email.
+
 ---
 
 FairShare – Making group expenses fair and simple.

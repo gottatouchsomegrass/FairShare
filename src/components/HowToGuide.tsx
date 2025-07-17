@@ -28,10 +28,11 @@ export function HowToGuide({ onClose }: { onClose: () => void }) {
         {
           title: "Invite Friends",
           content:
-            "Use the 'Invite Member' button in your group to add friends by their email address. They must have a FairShare account to join.",
+            "Use the 'Invite Member' button in your group to add friends by their User ID. Ask your friend for their User ID (see their profile page) and enter it in the invite form.",
           tips: [
             "Friends need to accept the invitation before they can participate",
             "Check the Members section to see who has joined",
+            "User IDs can be copied from the profile page for easy sharing",
           ],
         },
       ],
